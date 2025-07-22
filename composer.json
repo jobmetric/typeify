@@ -1,0 +1,39 @@
+{
+    "name": "jobmetric/typeify",
+    "description": "A flexible and extensible type system for managing structured data behaviors in Laravel applications.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "jobmetric",
+        "package",
+        "type",
+        "type system",
+        "system type"
+    ],
+    "homepage": "https://doc.jobmetric.net/package/typeify",
+    "authors": [
+        {
+            "name": "Majid Mohammadian",
+            "email": "majeedmohammadian@gmail.com",
+            "homepage": "https://www.linkedin.com/in/majidmohammadian/",
+            "role": "Full Stack Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.0.1",
+        "laravel/framework": ">=9.19",
+        "jobmetric/laravel-package-core": "^1.18.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "JobMetric\\Typeify\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "support": {
+        "issues": "https://github.com/jobmetric/typeify/issues",
+        "forum": "https://twitter.com/jobmetric",
+        "source": "https://github.com/jobmetric/typeify"
+    }
+}
