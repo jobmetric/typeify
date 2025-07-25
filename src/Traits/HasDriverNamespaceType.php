@@ -45,7 +45,7 @@ trait HasDriverNamespaceType
 
         $this->driverNamespace[$this->type] = array_merge($this->driverNamespace[$this->type] ?? [], $driverNamespace);
 
-        $this->setTypeParam('driverNamespace', $this->driverNamespace);
+        $this->setTypeParam('driver-namespace', $this->driverNamespace);
 
         return $this;
     }
@@ -57,7 +57,7 @@ trait HasDriverNamespaceType
      */
     public function getDriverNamespace(): Collection
     {
-        $driverNamespace = $this->getTypeParam('driverNamespace', []);
+        $driverNamespace = $this->getTypeParam('driver-namespace', []);
 
         return collect($driverNamespace[$this->type] ?? []);
     }
