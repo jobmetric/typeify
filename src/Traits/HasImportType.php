@@ -2,17 +2,22 @@
 
 namespace JobMetric\Typeify\Traits;
 
+use JobMetric\Typeify\Exceptions\TypeifyTypeNotMatchException;
+
 /**
  * Trait HasImportType
+ *
+ * Adds import flag for the current type (enable / check).
  *
  * @package JobMetric\Typeify
  */
 trait HasImportType
 {
     /**
-     * Enable Import.
+     * Enable import for the current type.
      *
      * @return static
+     * @throws TypeifyTypeNotMatchException
      */
     public function import(): static
     {
@@ -22,9 +27,10 @@ trait HasImportType
     }
 
     /**
-     * Has Import.
+     * Whether import is enabled for the current type.
      *
      * @return bool
+     * @throws TypeifyTypeNotMatchException
      */
     public function hasImport(): bool
     {
