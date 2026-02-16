@@ -17,44 +17,60 @@
 
 # Typeify
 
-A flexible and extensible type system for managing structured data behaviors in Laravel applications.
+**Define Types. Attach Behavior. Scale Cleanly.**
 
----
+Typeify simplifies how you define and manage type registries in Laravel. Stop scattering type configs and ad-hoc flags across your codebase—define named types once, attach labels, descriptions, import/export flags, and custom options through a single fluent API. This is where structured type management meets developer-friendly simplicity: one base class, composable traits, and the Laravel container as the single source of truth.
 
-## Introduction
+## Why Typeify?
 
-**Typeify** is a powerful and modular PHP package designed for Laravel that enables developers to define and manage multiple `"types"` of data entities with customized behaviors and metadata. Inspired by systems like WordPress post types and taxonomies, Typeify helps you centralize and organize your application’s data structures, making it easy to register types, attach labels, descriptions, import/export options, hierarchical relations, and more — all extensible through traits.
+### One Registry Per Concern
 
-This package allows you to keep your data types self-describing and behavior-rich without cluttering your models or services.
+Keep your type definitions normalized and queryable. Each subclass of `BaseType` is a single registry (e.g. post types, product types, taxonomy types). Define types with unique keys, attach parameters via fluent methods, and read them anywhere in the request lifecycle. No duplicated config arrays or scattered conditionals.
 
----
+### Composable Behavior with Traits
 
-## Features
+- **Labels & Descriptions** – Attach translatable label and description per type (`HasLabelType`, `HasDescriptionType`).
+- **Import / Export** – Enable import or export per type with a single flag (`HasImportType`, `HasExportType`).
+- **Hierarchical & List Options** – Mark types as hierarchical or control list UI (show description, remove filter, change status) via `HasHierarchicalType` and `HasListOptionType`.
+- **Driver Namespaces** – Register custom driver classes per type with `HasDriverNamespaceType`.
 
-- Define and register custom types with unique keys.
-- Attach labels and descriptions with localization support.
-- Enable import/export capabilities per type.
-- Manage hierarchical relationships.
-- Easily toggle UI/behavior options like change status in lists, remove filters, show descriptions.
-- Support for driver namespaces to extend with custom classes.
-- Modular traits to extend functionality without monolithic classes.
-- Full integration with Laravel’s service container and macros.
+Add only the traits you need. Your type classes stay thin and consistent.
 
----
+### Laravel-Native Storage
 
-## Installation
+All type data lives in the Laravel service container under the key returned by `typeName()`. The same definitions are available in controllers, APIs, admin panels, and CLI—no extra wiring, no custom globals. Use `trans()` for labels and descriptions so localization works out of the box.
 
-Run the following command to pull in the latest version:
+## What is a Type?
+
+A **type** in Typeify is a named key (e.g. `blog`, `product`, `page`) inside a single registry—your subclass of `BaseType`. Each type holds a set of **parameters**: label, description, and any flags or options you attach via traits.
+
+- **Define** – Call `define('key')` to register a new type, then chain methods to set parameters.
+- **Select** – Call `type('key')` to switch the current type and read or update its parameters.
+- **Store** – All data is stored in the Laravel container under `typeName()`, so it is global and consistent for the request.
+
+Consider a content system that needs post types (blog, news, page) and product types (physical, digital). With Typeify, you create a `PostType` and a `ProductType` registry, define each type with labels and descriptions, enable import/export or hierarchical where needed, and reuse the same definitions everywhere—in forms, tables, and API responses. The power lies not only in centralizing type config but in making it discoverable, translatable, and extensible through traits.
+
+## What Awaits You?
+
+By adopting Typeify, you will:
+
+- **Reduce development time** – Focus on domain types instead of config plumbing and duplicated arrays
+- **Write cleaner, more maintainable code** – One registry per concern, fluent API, no scattered type checks
+- **Scale your type system effortlessly** – Add traits and new types without breaking existing ones
+- **Stay Laravel-native** – Service container, `trans()` for labels/descriptions, and familiar patterns throughout
+- **Empower consistency** – Same type definitions everywhere: APIs, admin panels, and CLI
+
+## Quick Start
+
+Install Typeify via Composer:
 
 ```bash
 composer require jobmetric/typeify
 ```
 
-## Documentation
+## Usage (Examples)
 
-### Basic Usage
-
-Create a new type service by extending the abstract `BaseType` class and defining the `typeName()` method:
+Create a type registry by extending `BaseType` and implementing `typeName()`:
 
 ```php
 namespace App\Type;
@@ -68,99 +84,57 @@ class PostType extends BaseType
         return 'post-type';
     }
 }
-
 ```
 
-### Defining and Registering Types
-
-You can define new types dynamically:
+Define types and attach parameters (labels, descriptions, flags):
 
 ```php
 $postType = new PostType();
 
 $postType->define('blog')
-         ->label('Blog Post')
-         ->description('Posts for the blog section')
-         ->hierarchical()
-         ->import()
-         ->export();
+    ->label('Blog Post')
+    ->description('Posts for the blog section')
+    ->hierarchical()
+    ->import()
+    ->export();
+
+$postType->define('news')
+    ->label('News')
+    ->description('News articles');
 ```
 
-### Selecting a Type
-
-To work with a defined type, select it using the `type()` method:
+Select a type and read its data:
 
 ```php
 $postType->type('blog');
-```
-
-### Retrieving Type Data
-
-Get all data or specific parameters of the current type:
-
-```php
-$allData = $postType->get();
 
 $label = $postType->getLabel();
 $description = $postType->getDescription();
+$allParams = $postType->get();
+
+$postType->ensureTypeExists('blog');
+$availableTypes = $postType->getTypes();
 ```
 
-### Traits for Extended Behavior
+## Documentation
 
-Typeify uses traits to add modular capabilities to types:
+Ready to centralize your type system? Our comprehensive documentation is your gateway to mastering Typeify:
 
-- **HasLabelType**: Manage type labels.
-- **HasDescriptionType**: Manage type descriptions.
-- **HasImportType**: Enable import support.
-- **HasExportType**: Enable export support.
-- **HasHierarchicalType**: Mark types as hierarchical.
-- **HasListOptionType**: Enable list-related options such as:
-- - Show description in list
-- - Remove filters in list
-- - Change status in list
-- **HasDriverNamespaceType**: Manage driver namespaces to integrate external driver classes.
+**[📚 Read Full Documentation →](https://jobmetric.github.io/packages/typeify/)**
 
-Example of adding traits to your custom type:
+The documentation includes:
 
-```php
-use JobMetric\Typeify\Traits\HasLabelType;
-use JobMetric\Typeify\Traits\HasDescriptionType;
-use JobMetric\Typeify\Traits\HasImportType;
-use JobMetric\Typeify\Traits\HasExportType;
-
-class ProductType extends BaseType
-{
-    use HasLabelType, HasDescriptionType, HasImportType, HasExportType;
-
-    protected function typeName(): string
-    {
-        return 'productType';
-    }
-}
-```
-
-## Integration with Laravel
-
-Typeify leverages Laravel’s service container to store and retrieve all type information globally. This ensures your types and their parameters are easily accessible throughout your application lifecycle.
-
-## Error Handling
-
-- Throws `TypeifyTypeNotFoundException` when trying to select a type that hasn't been defined.
-- Throws `TypeifyTypeNotMatchException` when validating if a type exists.
-
-Make sure to catch or handle these exceptions accordingly.
-
-## Why Use Typeify?
-
-- **Centralized type management**: Keep all your data types' configurations and behaviors in one place.
-- **Highly extensible**: Use traits or create new ones to extend functionality.
-- **Lightweight and clean**: No bloated frameworks or rigid structures.
-- **Laravel-native**: Fully leverages Laravel’s ecosystem and best practices.
+- **Getting Started** – Quick introduction and installation guide
+- **BaseType** – Define, select, get/set parameters, container storage
+- **Traits** – HasLabelType, HasDescriptionType, HasImportType, HasExportType, HasHierarchicalType, HasListOptionType, HasDriverNamespaceType
+- **Exceptions** – TypeifyTypeNotFoundException, TypeifyTypeNotMatchException
+- **Integration** – Using type registries in other packages and the Laravel ecosystem
+- **Real-World Examples** – Post types, product types, and custom traits
 
 ## Contributing
 
-Thank you for considering contributing to the Typeify! The contribution guide can be found in the [CONTRIBUTING.md](https://github.com/jobmetric/typeify/blob/master/CONTRIBUTING.md).
+Thank you for participating in `typeify`. A contribution guide can be found [here](CONTRIBUTING.md).
 
 ## License
 
-The MIT License (MIT). Please see [License File](https://github.com/jobmetric/typeify/blob/master/LICENCE.md) for more information.
+The `typeify` is open-sourced software licensed under the MIT license. See [License File](LICENCE.md) for more information.
