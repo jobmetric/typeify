@@ -11,19 +11,11 @@
         "type system",
         "system type"
     ],
-    "homepage": "https://doc.jobmetric.net/package/typeify",
-    "authors": [
-        {
-            "name": "Majid Mohammadian",
-            "email": "majeedmohammadian@gmail.com",
-            "homepage": "https://www.linkedin.com/in/majidmohammadian/",
-            "role": "Full Stack Developer"
-        }
-    ],
+    "homepage": "https://jobmetric.github.io/packages/typeify",
     "require": {
         "php": ">=8.0.1",
         "laravel/framework": ">=9.19",
-        "jobmetric/laravel-package-core": "^1.18.6"
+        "jobmetric/laravel-package-core": "^1.37"
     },
     "autoload": {
         "psr-4": {
@@ -35,5 +27,13 @@
         "issues": "https://github.com/jobmetric/typeify/issues",
         "forum": "https://twitter.com/jobmetric",
         "source": "https://github.com/jobmetric/typeify"
-    }
+    },
+    "authors": [
+        {
+            "name": "Majid Mohammadian",
+            "email": "majeedmohammadian@gmail.com",
+            "homepage": "https://www.linkedin.com/in/majidmohammadian/",
+            "role": "Full Stack Developer"
+        }
+    ]
 }
