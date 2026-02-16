@@ -17,9 +17,18 @@
         "laravel/framework": ">=9.19",
         "jobmetric/laravel-package-core": "^1.37"
     },
+    "require-dev": {
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "phpunit/phpunit": "^10.0|^11.0"
+    },
     "autoload": {
         "psr-4": {
             "JobMetric\\Typeify\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JobMetric\\Typeify\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "stable",
